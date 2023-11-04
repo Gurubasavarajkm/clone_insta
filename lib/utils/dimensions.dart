@@ -1,0 +1,1 @@
+const mobileScreenSize = 600;
