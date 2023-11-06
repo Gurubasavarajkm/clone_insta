@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/responsive/MobileScreen.dart';
-import 'package:instagram_clone/responsive/responsive_layout.dart';
-import 'package:instagram_clone/responsive/webScreen.dart';
+import 'package:instagram_clone/screens/Login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
 void main() async
@@ -37,8 +35,8 @@ class MyApp extends StatelessWidget{
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor
       ),
-      home: const ResponsiveLayout(webScreenLayout:  WebScreen(), mobileScreenLayout:  MobileScreen(),
-      ),
+      home: const LoginScreen(),//const ResponsiveLayout(webScreenLayout:  WebScreen(), mobileScreenLayout:  MobileScreen(),
+      //),
     );
   }
 }
