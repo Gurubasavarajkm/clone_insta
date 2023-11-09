@@ -1,28 +1,37 @@
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/screens/Login_screen.dart';
+import 'package:instagram_clone/screens/sign_up_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
-void main() async
-{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(kIsWeb)
-  {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyALMF42ygvAA-tXkInFhCrsHkFPRHiSgZQ',
-         appId: '1:937418993801:web:239229dfdfb4fa82bd5658', 
-         messagingSenderId: '937418993801', 
-         projectId: 'feedcom-b694b',
-         storageBucket: 'feedcom-b694b.appspot.com')
-    );
-  }
-  else{
-      await Firebase.initializeApp();
+  try {
+    if (kIsWeb) {
+      // Firebase initialization for web
+      // await Firebase.initializeApp(
+      //   options: const FirebaseOptions(
+      //     apiKey: 'Your-API-Key',
+      //     appId: 'Your-App-ID',
+      //     messagingSenderId: 'Your-Messaging-Sender-ID',
+      //     projectId: 'Your-Project-ID',
+      //     storageBucket: 'Your-Storage-Bucket',
+      //   ),
+      // );
+    } else {
+      // Firebase initialization for non-web platforms
+    //  await Firebase.initializeApp(
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    //  );
+    }
+  } catch (e) {
+    debugPrint(e.toString());
   }
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget{
   const MyApp({super.key});
@@ -35,8 +44,8 @@ class MyApp extends StatelessWidget{
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor
       ),
-      home: const LoginScreen(),//const ResponsiveLayout(webScreenLayout:  WebScreen(), mobileScreenLayout:  MobileScreen(),
-      //),
+      home: const SignUpScreen()//const ResponsiveLayout(webScreenLayout:  WebScreen(), mobileScreenLayout:  MobileScreen(),
+      // ),
     );
   }
 }

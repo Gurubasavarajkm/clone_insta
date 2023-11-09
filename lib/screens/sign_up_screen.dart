@@ -1,38 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/screens/sign_up_screen.dart';
-import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/resources/auth_provider.dart';
 import 'package:instagram_clone/widgets/Text_field_input.dart';
+// import 'package:firebase_core/firebase_core.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _bioeditingController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _bioeditingController.dispose();
+    _userNameController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text("Instagram", style: TextStyle(fontStyle: FontStyle.italic),),
+        title: const Text(
+          "Instagram",
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 1),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,21 +51,48 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 10),
+                padding: const EdgeInsets.only(top: 2, bottom: 2),
                 child: ColorFiltered(
                   colorFilter:
                       const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                   child: SvgPicture.asset(
                     'assets/ic_instagram.svg',
+                    height: 64,
                   ),
                 ),
+              ),
+              Stack(
+                children: [
+                  const CircleAvatar(
+                    radius: 64,
+                    backgroundImage: NetworkImage(
+                        'https://th.bing.com/th/id/OIP.ybB2a0HimX1I-ybBY4pOPwHaHa?pid=ImgDet&rs=1'),
+                  ),
+                  Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.add_a_photo),
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 22,
+              ),
+              TextFieldInput(
+                textEditingController: _userNameController,
+                hintText: 'Enter Your Username',
+                textInputType: TextInputType.emailAddress,
               ),
               const SizedBox(
                 height: 22,
               ),
               TextFieldInput(
                 textEditingController: _emailController,
-                hintText: 'Enter Your email/Username',
+                hintText: 'Enter Your email',
                 textInputType: TextInputType.emailAddress,
               ),
               const SizedBox(
@@ -71,8 +107,23 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 22,
               ),
+              TextFieldInput(
+                textEditingController: _bioeditingController,
+                hintText: 'Enter Your bio',
+                textInputType: TextInputType.emailAddress,
+              ),
+              const SizedBox(
+                height: 22,
+              ),
               InkWell(
-                onTap: () {},
+                onTap: () async{
+                  print('Button Clicked');
+                  await AuthMethods().signUpUser(
+                    username: _userNameController.text, 
+                    email: _emailController.text, 
+                    password: _passwordController.text, 
+                    bio: _bioeditingController.text);
+                },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   width: double.infinity,
@@ -85,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     color: Colors.blue,
                   ),
-                  child: const Text('Log in'),
+                  child: const Text('Sign Up'),
                 ),
               ),
               Flexible(
@@ -97,20 +148,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: const Text("Don't have an account?"),
+                    child: const Text("Already have an account?"),
                   ),
                   GestureDetector(
-                    onTap: () {
-                    //   Navigator.of(context).pushAndRemoveUntil( , (route) => false);
-                     },
+                    onTap: () {},
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      //padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
-                        "Sign Up",
+                        "Log in",
                         style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            ),
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
