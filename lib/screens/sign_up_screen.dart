@@ -6,7 +6,6 @@ import 'package:instagram_clone/resources/auth_provider.dart';
 import 'package:instagram_clone/utils/utilities.dart';
 import 'package:instagram_clone/widgets/Text_field_input.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -20,6 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _bioeditingController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
   Uint8List? _image;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -30,12 +30,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _userNameController.dispose();
   }
 
-  void selectImage() async
-  {
-    Uint8List im =await PickImage(ImageSource.gallery);
+  void selectImage() async {
+    Uint8List im = await PickImage(ImageSource.gallery);
     setState(() {
       _image = im;
     });
+  }
+
+  void signUpUser() async {
+    await AuthMethods().signUpUser(
+        username: _userNameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        bio: _bioeditingController.text,
+        file: _image!);
   }
 
   @override
@@ -74,15 +82,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Stack(
                 children: [
-                  _image!=null?  CircleAvatar(
-                    radius: 64,
-                    backgroundImage: MemoryImage(_image!)
-                  )
-                  : const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        'https://th.bing.com/th/id/OIP.ybB2a0HimX1I-ybBY4pOPwHaHa?pid=ImgDet&rs=1'),
-                  ),
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64, backgroundImage: MemoryImage(_image!))
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                              'https://th.bing.com/th/id/OIP.ybB2a0HimX1I-ybBY4pOPwHaHa?pid=ImgDet&rs=1'),
+                        ),
                   Positioned(
                     bottom: -10,
                     left: 80,
@@ -133,13 +140,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 22,
               ),
               InkWell(
-                onTap: () async{
-                  await AuthMethods().signUpUser(
-                    username: _userNameController.text, 
-                    email: _emailController.text, 
-                    password: _passwordController.text, 
-                    bio: _bioeditingController.text,
-                    );
+                onTap: () async {
+                  signUpUser();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
