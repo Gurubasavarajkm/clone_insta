@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:instagram_clone/resources/storage_methods.dart';
 // import 'package:flutter/material.dart';
 
@@ -21,6 +22,7 @@ class AuthMethods {
           password.isNotEmpty ||
           username.isNotEmpty ||
           bio.isNotEmpty) {
+
         // register User
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -46,4 +48,22 @@ class AuthMethods {
 
     return res;
   }
+
+  Future<String> logInUser({required String email, required password}) async
+  {
+    String res = 'Some error has occured';
+    if(email.isNotEmpty || password.isNotEmpty)
+    {
+      try{
+          _auth.signInWithEmailAndPassword(email: email, password: password);
+          res = 'success';
+      }
+      catch (e){
+          //
+      }
+    }
+
+    return res;
+  }
+
 }

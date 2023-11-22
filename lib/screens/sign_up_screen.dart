@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_provider.dart';
+import 'package:instagram_clone/screens/login_Screen.dart';
 import 'package:instagram_clone/utils/utilities.dart';
 import 'package:instagram_clone/widgets/Text_field_input.dart';
 
@@ -18,6 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioeditingController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
+  String res = "Something has occured";
   Uint8List? _image;
   bool _isLoading = false;
 
@@ -38,12 +40,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void signUpUser() async {
-    await AuthMethods().signUpUser(
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
         username: _userNameController.text,
         email: _emailController.text,
         password: _passwordController.text,
         bio: _bioeditingController.text,
         file: _image!);
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if(res != 'success')
+    {
+      mounted ? showSnackBar(res, context) : null;
+    }
   }
 
   @override
@@ -155,7 +169,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     color: Colors.blue,
                   ),
-                  child: const Text('Sign Up'),
+                  child:  _isLoading
+                        ? const Center(child:  CircularProgressIndicator(
+                          color: Colors.white,
+                        ),)
+                        : const Text('Sign Up'),
                 ),
               ),
               Flexible(
@@ -170,17 +188,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: const Text("Already have an account?"),
                   ),
                   GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      //padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text(
-                        "Log in",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
+                    },
+                    child: const Text(
+                            "LogIn",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ],
               )
