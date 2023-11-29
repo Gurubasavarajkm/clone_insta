@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_provider.dart';
-import 'package:instagram_clone/screens/login_Screen.dart';
+import 'package:instagram_clone/responsive/mobile_screen.dart';
+import 'package:instagram_clone/responsive/responsive_layout.dart';
+import 'package:instagram_clone/responsive/webScreen.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/utilities.dart';
 import 'package:instagram_clone/widgets/Text_field_input.dart';
 
@@ -54,9 +57,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _isLoading = false;
     });
 
-    if(res != 'success')
-    {
+    if (res != 'success') {
       mounted ? showSnackBar(res, context) : null;
+    } else {
+      mounted
+          ? Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const ResponsiveLayout(
+                    webScreenLayout: WebScreen(),
+                    mobileScreenLayout: MobileScreen()),
+              ),
+            )
+          : null;
     }
   }
 
@@ -169,11 +181,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     color: Colors.blue,
                   ),
-                  child:  _isLoading
-                        ? const Center(child:  CircularProgressIndicator(
-                          color: Colors.white,
-                        ),)
-                        : const Text('Sign Up'),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text('Sign Up'),
                 ),
               ),
               Flexible(
@@ -189,15 +203,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
                     },
                     child: const Text(
-                            "LogIn",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                      "LogIn",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               )

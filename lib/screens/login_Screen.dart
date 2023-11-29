@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/resources/auth_provider.dart';
-import 'package:instagram_clone/screens/home_screen.dart';
+import 'package:instagram_clone/responsive/mobile_screen.dart';
+import 'package:instagram_clone/responsive/responsive_layout.dart';
+import 'package:instagram_clone/responsive/webScreen.dart';
 import 'package:instagram_clone/screens/sign_up_screen.dart';
 import 'package:instagram_clone/utils/utilities.dart';
 // import 'package:instagram_clone/screens/sign_up_screen.dart';
@@ -27,34 +29,40 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
   }
 
-  loginUser() async
-  {
+  loginUser() async {
     setState(() {
       _isLoading = true;
     });
     String res = await AuthMethods().logInUser(
-      email: _emailController.text,
-       password: _passwordController.text
-       );
+        email: _emailController.text, password: _passwordController.text);
 
-       if(res == 'success')
-       {
-        mounted ? Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeScreen())) : null;
-       }
-       else{
-        mounted ? showSnackBar(res, context) : null;
-       }
-       setState(() {
-         _isLoading = false;
-       });
-
+    if (res == 'success') {
+      mounted
+          ? Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const ResponsiveLayout(
+                  webScreenLayout: WebScreen(),
+                  mobileScreenLayout: MobileScreen(),
+                ),
+              ),
+            )
+          : null;
+    } else {
+      mounted ? showSnackBar(res, context) : null;
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Instagram", style: TextStyle(fontStyle: FontStyle.italic),),
+        title: const Text(
+          "Instagram",
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
@@ -101,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               InkWell(
                 onTap: () {
-                    loginUser();
+                  loginUser();
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
@@ -115,8 +123,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     color: Colors.blue,
                   ),
-                  child: _isLoading ? const Center(child: CircularProgressIndicator(color: Colors.white),) : 
-                  const Text('Log in'),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        )
+                      : const Text('Log in'),
                 ),
               ),
               Flexible(
@@ -132,16 +143,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const SignUpScreen()));
-                     },
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const SignUpScreen()));
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            ),
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
